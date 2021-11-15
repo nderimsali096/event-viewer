@@ -1,18 +1,25 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <!-- <div class="d-block">
+      <add-new-event />
+    </div> -->
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+//import AddNewEvent from "../views/events/AddNewEvent.vue";
 
 export default {
-  name: 'Home',
   components: {
-    HelloWorld
-  }
-}
+    //AddNewEvent,
+  },
+  methods: {
+    clicked() {
+      console.log("clicked");
+    },
+    goToAddEvent() {
+      this.$router.replace("/event/add-new");
+    },
+  },
+};
 </script>

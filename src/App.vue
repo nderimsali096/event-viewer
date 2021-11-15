@@ -1,32 +1,49 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar class="mb-12" tile height="70px" color="primary" dark>
+      <template v-slot:img="{ props }">
+        <v-img
+          v-bind="props"
+          gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
+        ></v-img>
+      </template>
+
+      <v-toolbar-title>titlw</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+      <template v-slot:extension>
+        <v-tabs align-with-title>
+          <v-tab @click="clicked">All events</v-tab>
+          <v-tab @click="goToAddEvent">Add event</v-tab>
+        </v-tabs>
+      </template>
+    </v-app-bar>
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+export default {
+  name: "App",
 
-#nav {
-  padding: 30px;
-}
+  data: () => ({
+    //
+  }),
+  methods: {
+    clicked() {
+      this.$router.replace("/auth/login");
+    },
+    goToAddEvent() {
+      this.$router.replace("/event/add-new");
+    },
+  },
+};
+</script>
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+<style scoped>
+.v-toolbar {
+  flex: 0;
 }
 </style>
