@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Events from '../views/events/Events.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
 	{
 		path: '/',
-		name: 'Home',
-		component: Home,
+		name: 'Events',
+		component: Events,
 	},
 	{
 		path: '/about',
@@ -21,12 +21,18 @@ const routes = [
 		name: 'Login',
 		component: () =>
 			import(/* webpackChunkName: "login" */ '../views/auth/Login.vue'),
+		meta: {
+			hideNavbar: true,
+		},
 	},
 	{
 		path: '/auth/register',
 		name: 'Register',
 		component: () =>
 			import(/* webpackChunkName: "register" */ '../views/auth/Register.vue'),
+		meta: {
+			hideNavbar: true,
+		},
 	},
 	{
 		path: '/event/add-new',
@@ -35,6 +41,13 @@ const routes = [
 			import(
 				/* webpackChunkName: "add-new" */ '../views/events/AddNewEvent.vue'
 			),
+	},
+	{
+		path: '/event/edit',
+		name: 'Edit',
+		component: () =>
+			import(/* webpackChunkName: "edit" */ '../views/events/EditEvent.vue'),
+		props: { eventData: {} },
 	},
 ];
 

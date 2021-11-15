@@ -1,6 +1,13 @@
 <template>
   <v-app>
-    <v-app-bar class="mb-12" tile height="70px" color="primary" dark>
+    <v-app-bar
+      v-if="!$route.meta.hideNavbar"
+      class="mb-12"
+      tile
+      height="70px"
+      color="primary"
+      dark
+    >
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
@@ -11,6 +18,22 @@
       <v-toolbar-title>titlw</v-toolbar-title>
 
       <v-spacer></v-spacer>
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            @click="logout"
+            large
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+          >
+            mdi-logout
+          </v-icon>
+        </template>
+        <span>LOG OUT</span>
+      </v-tooltip>
+
       <template v-slot:extension>
         <v-tabs align-with-title>
           <v-tab @click="clicked">All events</v-tab>
@@ -28,15 +51,16 @@
 export default {
   name: "App",
 
-  data: () => ({
-    //
-  }),
+  data: () => ({}),
   methods: {
     clicked() {
-      this.$router.replace("/auth/login");
+      this.$router.replace("/");
     },
     goToAddEvent() {
       this.$router.replace("/event/add-new");
+    },
+    logout() {
+      this.$router.replace("/auth/login");
     },
   },
 };
