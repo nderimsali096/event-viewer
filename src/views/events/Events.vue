@@ -87,7 +87,6 @@ export default {
     deleteItemConfirm() {
       const allEvents = JSON.parse(localStorage.getItem("events")) || [];
       this.removeEvent(allEvents, this.editedIndex);
-      console.log(allEvents);
       localStorage.setItem("events", JSON.stringify(allEvents));
       this.closeDelete();
       this.deletedSuccefully = true;

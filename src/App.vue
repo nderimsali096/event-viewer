@@ -44,6 +44,38 @@
     <v-main>
       <router-view />
     </v-main>
+    <v-footer v-if="!$route.meta.hideNavbar" dark padless>
+      <v-card
+        width="100%"
+        flat
+        tile
+        class="indigo lighten-1 white--text text-center"
+      >
+        <v-card-text>
+          <v-btn
+            v-for="icon in icons"
+            :key="icon"
+            class="mx-4 white--text"
+            icon
+          >
+            <v-icon size="24px">
+              {{ icon }}
+            </v-icon>
+          </v-btn>
+        </v-card-text>
+
+        <v-card-text class="white--text pt-0">
+          "Alone we can do so little; together we can do so much." – Helen
+          Keller
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-text class="white--text">
+          {{ new Date().getFullYear() }} — <strong>Company Name</strong>
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 
@@ -52,7 +84,9 @@ export default {
   name: "App",
 
   data: () => {
-    return {};
+    return {
+      icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"],
+    };
   },
   methods: {
     logout() {

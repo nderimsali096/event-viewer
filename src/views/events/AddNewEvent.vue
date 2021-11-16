@@ -9,6 +9,10 @@
           <v-alert v-if="addedSuccessfully" dense text type="success">
             Event was added succefully.
           </v-alert>
+          <v-alert v-if="validation" dense text type="error">
+            Event must have a valid <strong>name</strong> and a valid
+            <strong>date</strong>.
+          </v-alert>
           <v-text-field
             v-model="eventName"
             :rules="[(v) => !!v || 'Event name is required']"
@@ -53,7 +57,6 @@
             <v-btn @click="backToEvents" outlined color="primary">
               Back to all events
             </v-btn>
-            <v-btn @click="addAnother" color="primary">Add another event</v-btn>
           </v-card-actions>
         </v-form>
       </v-card-text>
@@ -71,11 +74,19 @@ export default {
       currentUser: {},
       addedSuccessfully: false,
       adding: true,
+      validation: false,
     };
   },
 
   methods: {
     addNewEvent() {
+      if (!this.eventName || !this.eventDate) {
+        this.validation = true;
+        setTimeout(() => {
+          this.validation = false;
+        }, 3000);
+        return;
+      }
       const newEvent = {
         id: Math.floor(Math.random() * 1000),
         userId: this.currentUser.id,
@@ -105,7 +116,7 @@ export default {
       this.$router.replace("/");
     },
     addAnother() {
-      this.adding = true;
+      this.$forceUpdate();
     },
   },
 
