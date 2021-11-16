@@ -21,6 +21,7 @@
                         prepend-icon="mdi-alpha-f-box"
                         name="first-name"
                         :rules="[(v) => !!v || 'First name is required']"
+                        validate-on-blur
                         label="First name"
                         type="text"
                       ></v-text-field>
@@ -32,6 +33,7 @@
                         prepend-icon="mdi-alpha-l-box"
                         name="lastname"
                         :rules="[(v) => !!v || 'Last name is required']"
+                        validate-on-blur
                         label="Last name"
                         type="text"
                       ></v-text-field>
@@ -44,6 +46,7 @@
                         prepend-icon="mdi-account"
                         name="username"
                         :rules="[(v) => !!v || 'Username is required']"
+                        validate-on-blur
                         label="Username"
                         type="text"
                       ></v-text-field>
@@ -55,6 +58,7 @@
                         prepend-icon="mdi-lock"
                         name="password"
                         :rules="passwordRules"
+                        validate-on-blur
                         label="Password"
                         type="password"
                       ></v-text-field>
@@ -67,6 +71,7 @@
                         prepend-icon="mdi-email"
                         name="email"
                         :rules="emailRules"
+                        validate-on-blur
                         label="E-mail"
                         type="email"
                       ></v-text-field>
@@ -78,6 +83,7 @@
                         prepend-icon="mdi-phone"
                         name="phone"
                         :rules="[(v) => !!v || 'Phone is required']"
+                        validate-on-blur
                         label="Phone number"
                         type="number"
                       ></v-text-field>
@@ -152,11 +158,11 @@ export default {
       this.addToLocaleStorage(newUser);
     },
     addToLocaleStorage(newUser) {
-      let existingList = JSON.parse(localStorage.getItem("allEntries"));
+      let existingList = JSON.parse(localStorage.getItem("users"));
       if (existingList == null) existingList = [];
-      localStorage.setItem("entry", JSON.stringify(newUser));
+      localStorage.setItem("user", JSON.stringify(newUser));
       existingList.push(newUser);
-      localStorage.setItem("allEntries", JSON.stringify(existingList));
+      localStorage.setItem("users", JSON.stringify(existingList));
       this.addedSuccessfully = true;
       this.clearFields();
     },

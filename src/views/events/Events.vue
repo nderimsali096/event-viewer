@@ -14,7 +14,7 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+                >Are you sure you want to delete this event?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -28,6 +28,10 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+
+          <v-alert v-if="deletedSuccefully" dense text type="success">
+            Event was deleted succefully.
+          </v-alert>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
@@ -42,41 +46,22 @@
 <script>
 export default {
   data: () => ({
-    dialog: false,
     dialogDelete: false,
+    deletedSuccefully: false,
     headers: [
       {
         text: "Event name",
         align: "start",
         sortable: false,
-        value: "name",
+        value: "eventName",
       },
-      { text: "Event date", value: "date" },
-      { text: "Description", value: "description", sortable: false },
+      { text: "Event date", value: "eventDate" },
+      { text: "Description", value: "eventDescription", sortable: false },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    events: [
-      {
-        name: "Sample",
-        date: new Date(),
-        description: "Sample event description",
-      },
-    ],
+    events: [],
+    currentUser: {},
     editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-    defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
   }),
 
   created() {
@@ -84,50 +69,51 @@ export default {
   },
 
   methods: {
-    initialize() {},
+    initialize() {
+      this.currentUser = JSON.parse(localStorage.getItem("loggedUser"));
+      this.getEvents();
+    },
 
     editItem(item) {
-      console.log("edit" + item);
+      localStorage.setItem("currentEvent", JSON.stringify(item));
       this.$router.replace("/event/edit");
-      //   this.editedIndex = this.desserts.indexOf(item);
-      //   this.editedItem = Object.assign({}, item);
-      //   this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
+      this.editedIndex = item.id;
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      const allEvents = JSON.parse(localStorage.getItem("events")) || [];
+      this.removeEvent(allEvents, this.editedIndex);
+      console.log(allEvents);
+      localStorage.setItem("events", JSON.stringify(allEvents));
       this.closeDelete();
+      this.deletedSuccefully = true;
+      setTimeout(() => {
+        this.deletedSuccefully = false;
+      }, 3000);
+      this.events = [];
+      this.getEvents();
     },
-
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
     closeDelete() {
       this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+    },
+    getEvents() {
+      const allEvents = JSON.parse(localStorage.getItem("events")) || [];
+      allEvents.forEach((event) => {
+        if (event.userId === this.currentUser.id) {
+          this.events.push(event);
+        }
       });
     },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
+    removeEvent(arr, id) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].id === id) {
+          arr.splice(i, 1);
+        }
       }
-      this.close();
     },
   },
 };

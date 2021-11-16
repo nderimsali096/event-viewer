@@ -15,7 +15,7 @@
         ></v-img>
       </template>
 
-      <v-toolbar-title>titlw</v-toolbar-title>
+      <v-toolbar-title>Event Viewer</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -36,8 +36,8 @@
 
       <template v-slot:extension>
         <v-tabs align-with-title>
-          <v-tab @click="clicked">All events</v-tab>
-          <v-tab @click="goToAddEvent">Add event</v-tab>
+          <v-tab to="/">All events</v-tab>
+          <v-tab to="/event/add-new">Add event</v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
@@ -51,15 +51,12 @@
 export default {
   name: "App",
 
-  data: () => ({}),
+  data: () => {
+    return {};
+  },
   methods: {
-    clicked() {
-      this.$router.replace("/");
-    },
-    goToAddEvent() {
-      this.$router.replace("/event/add-new");
-    },
     logout() {
+      localStorage.removeItem("loggedUser");
       this.$router.replace("/auth/login");
     },
   },

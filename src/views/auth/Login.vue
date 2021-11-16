@@ -67,6 +67,8 @@ export default {
       username: "",
       password: "",
       invalidCredentials: false,
+      id: -1,
+      fullName: "",
     };
   },
   methods: {
@@ -76,6 +78,11 @@ export default {
         password: this.password,
       };
       if (this.checkIsItValid(data)) {
+        const loggedUser = {
+          name: this.fullName,
+          id: this.id,
+        };
+        localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
         this.$router.replace("/");
       } else {
         this.invalidCredentials = true;
@@ -85,7 +92,7 @@ export default {
       this.$router.replace("/auth/register");
     },
     getUsers() {
-      this.users = JSON.parse(localStorage.getItem("allEntries")) || [];
+      this.users = JSON.parse(localStorage.getItem("users")) || [];
     },
     checkIsItValid(data) {
       let flag = false;
@@ -94,6 +101,8 @@ export default {
           user.username === data.username &&
           user.password === data.password
         ) {
+          this.fullName = user.firstName + " " + user.lastName;
+          this.id = user.id;
           flag = true;
         }
       });

@@ -9,12 +9,9 @@ const routes = [
 		path: '/',
 		name: 'Events',
 		component: Events,
-	},
-	{
-		path: '/about',
-		name: 'About',
-		component: () =>
-			import(/* webpackChunkName: "about" */ '../views/About.vue'),
+		meta: {
+			requiresAuth: true,
+		},
 	},
 	{
 		path: '/auth/login',
@@ -32,6 +29,7 @@ const routes = [
 			import(/* webpackChunkName: "register" */ '../views/auth/Register.vue'),
 		meta: {
 			hideNavbar: true,
+			requiresAuth: false,
 		},
 	},
 	{
@@ -41,13 +39,22 @@ const routes = [
 			import(
 				/* webpackChunkName: "add-new" */ '../views/events/AddNewEvent.vue'
 			),
+		meta: {
+			requiresAuth: true,
+		},
 	},
 	{
 		path: '/event/edit',
 		name: 'Edit',
 		component: () =>
 			import(/* webpackChunkName: "edit" */ '../views/events/EditEvent.vue'),
-		props: { eventData: {} },
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '*',
+		redirect: '/auth/login',
 	},
 ];
 
@@ -55,6 +62,13 @@ const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
 	routes,
+});
+
+router.beforeEach((to, from, next) => {
+	const loggedUser = localStorage.getItem('loggedUser');
+	const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+	if (requiresAuth && !loggedUser) next('/auth/login');
+	else next();
 });
 
 export default router;
